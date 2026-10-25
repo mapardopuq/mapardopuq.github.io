@@ -47,7 +47,11 @@ footer{max-width:880px;margin:0 auto;padding-block:20px 40px;border-top:1px soli
 <main>
   <div class="top">
     <div class="eyebrow">mapardopuq · Punta Arenas · Chile</div>
-    <button class="snd" id="snd" type="button" aria-pressed="false">♪ Sonido: no</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="snd" id="bgm-btn" type="button" aria-pressed="false">▶ Música</button>
+      <button class="snd" id="snd" type="button" aria-pressed="false">♪ Efectos: no</button>
+    </div>
+    <audio id="bgm" src="musica/epic-melodic-metal-davidjbarrios.mp3" loop preload="none"></audio>
   </div>
   <h1 id="name">Miguel Ángel <span class="acc">Pardo</span></h1>
   <p class="lede">Mi sitio personal. Aquí junto los proyectos que voy armando: música, cultura, tecnología y lo que venga.</p>
@@ -71,7 +75,7 @@ footer{max-width:880px;margin:0 auto;padding-block:20px 40px;border-top:1px soli
     </div>
   </section>
 </main>
-<footer>© 2026 Miguel Ángel Pardo · hecho con Claude</footer>
+<footer>© 2026 Miguel Ángel Pardo · Música: "Epic Melodic Metal Instrumental" de <a href="https://pixabay.com/music/metal-epic-melodic-metal-instrumental-powerful-amp-atmospheric-metal-452675/" style="color:inherit">DavidJBarrios</a> (Pixabay)</footer>
 
 <script>
 (() => {
@@ -81,7 +85,7 @@ footer{max-width:880px;margin:0 auto;padding-block:20px 40px;border-top:1px soli
   let ctx = null, on = false;
   try { on = localStorage.getItem("mp-snd") === "1"; } catch (e) {}
   const btn = document.getElementById("snd");
-  const paint = () => { btn.setAttribute("aria-pressed", on); btn.textContent = on ? "♪ Sonido: sí" : "♪ Sonido: no"; };
+  const paint = () => { btn.setAttribute("aria-pressed", on); btn.textContent = on ? "♪ Efectos: sí" : "♪ Efectos: no"; };
   paint();
   const audio = () => { if (!ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } if (ctx && ctx.state === "suspended") ctx.resume(); return ctx; };
   function tone(freq, dur = .25, vol = .05) {
@@ -112,8 +116,18 @@ footer{max-width:880px;margin:0 auto;padding-block:20px 40px;border-top:1px soli
   cv.addEventListener("pointermove", e => { const c = colAt(e); push[c] = 1; if (c !== lastCol && e.pointerType !== "mouse") tone(scale[c], .25, .03); lastCol = c; });
   cv.addEventListener("pointerleave", () => lastCol = -1);
   cv.addEventListener("pointerdown", e => { const c = colAt(e); push[c] = 1.2; tone(scale[c], .6, .06); });
+  // música de fondo opcional: parte apagada; al sonar, el ecualizador lee la canción real
+  const bgm = document.getElementById("bgm"), bbtn = document.getElementById("bgm-btn");
+  let analyser = null, bins = null;
+  bgm.volume = .45;
+  const linkAnalyser = () => { if (analyser) return; const a = audio(); if (!a) return; try { const src = a.createMediaElementSource(bgm); analyser = a.createAnalyser(); analyser.fftSize = 256; analyser.smoothingTimeConstant = .6; bins = new Uint8Array(analyser.frequencyBinCount); src.connect(analyser); analyser.connect(a.destination); } catch (e) { analyser = null; } };
+  const paintB = () => { const p = !bgm.paused; bbtn.setAttribute("aria-pressed", p); bbtn.textContent = p ? "❚❚ Pausar música" : "▶ Música"; };
+  bbtn.addEventListener("click", () => { if (bgm.paused) { linkAnalyser(); bgm.play().catch(() => {}); } else bgm.pause(); });
+  bgm.addEventListener("play", paintB); bgm.addEventListener("pause", paintB);
+  const bandOf = i => { const lo = Math.floor(Math.pow(i / N, 1.8) * 90) + 1, hi = Math.max(lo + 1, Math.floor(Math.pow((i + 1) / N, 1.8) * 90) + 1); let s = 0; for (let k = lo; k < hi; k++) s += bins[k]; return s / (hi - lo) / 255; };
   // energía "musical": graves con pulso de bombo, medios y agudos más nerviosos
   const energy = (i, now) => {
+    if (analyser && !bgm.paused) { if (i === 0) analyser.getByteFrequencyData(bins); return Math.min(1, Math.pow(bandOf(i), 1.4) * 1.25 + push[i]); }
     const bass = i < 4, mids = i < 9;
     const kick = Math.max(0, 1 - ((now % 520) / 520) * 2.2);
     let e = bass ? .35 + .55 * kick : mids ? .3 + .35 * Math.random() : .15 + .45 * Math.random() * Math.random();
