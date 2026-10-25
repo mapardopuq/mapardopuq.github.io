@@ -1,0 +1,158 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><title>Miguel Ángel Pardo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Sitio personal de Miguel Ángel Pardo: proyectos, música y cultura.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500;62..125,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: portada personal con el mismo sistema visual del Atlas sonoro; ecualizador animado como único momento de movimiento */
+:root{--bg:#F2F3F1;--paper:#FFFFFF;--ink:#16181C;--muted:#5D6168;--line:#D9DBD7;--soft:#E8EAE6;--accent:#C2410C;--accent2:#B7791F;--accent-ink:#FFFFFF;
+--display:"Archivo","Arial Narrow",system-ui,sans-serif;--body:"Source Serif 4",Georgia,serif;--mono:"JetBrains Mono",ui-monospace,Consolas,monospace}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#101113;--paper:#18191C;--ink:#ECEDEA;--muted:#A3A7AD;--line:#2B2D31;--soft:#202226;--accent:#FB8A4C;--accent2:#E0A43A;--accent-ink:#1A0D05;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#101113;--paper:#18191C;--ink:#ECEDEA;--muted:#A3A7AD;--line:#2B2D31;--soft:#202226;--accent:#FB8A4C;--accent2:#E0A43A;--accent-ink:#1A0D05;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.65;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:880px;margin:0 auto;padding-block:44px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.snd{font-family:var(--mono);font-size:.76rem;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer}
+.snd:hover,.snd:focus-visible{border-color:var(--ink);outline:none}
+.snd[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+h1{font-family:var(--display);font-weight:800;font-stretch:115%;font-size:clamp(2.4rem,8vw,4.8rem);line-height:.95;letter-spacing:-.03em;margin:22px 0 0}
+h1 .acc{color:var(--accent)}
+h1 .ch{display:inline-block;transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+h1 .ch:hover{transform:translateY(-.12em)}
+.lede{max-width:60ch;color:var(--muted);font-size:1.1rem}
+.eq-wrap{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px}
+.eq-wrap canvas{display:block;width:100%;height:170px;cursor:pointer;touch-action:none}
+section{margin-top:56px}
+h2{font-family:var(--display);font-weight:800;font-size:1.5rem;margin:0 0 14px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr))}
+.card{display:block;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px;color:inherit;text-decoration:none;min-width:0;transition:transform .2s ease,border-color .2s ease}
+a.card:hover,a.card:focus-visible{border-color:var(--ink);transform:translateY(-3px);outline:none}
+.card h3{font-family:var(--display);font-weight:800;font-size:1.2rem;margin:.3rem 0}
+.card p{margin:0;color:var(--muted);font-size:.93rem}
+.feat{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:20px;align-items:center}
+@media (max-width:640px){.feat{grid-template-columns:1fr}}
+.feat h3{font-size:1.9rem}
+.go{display:inline-block;margin-top:14px;font-family:var(--mono);font-size:.82rem;background:var(--accent);color:var(--accent-ink);border-radius:8px;padding:8px 14px}
+.vinyl{width:150px;height:150px;margin:auto;border-radius:50%;background:repeating-radial-gradient(circle,var(--ink) 0 2px,var(--soft) 2px 5px);position:relative}
+.vinyl::after{content:"";position:absolute;inset:36%;border-radius:50%;background:var(--accent)}
+.vinyl::before{content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:var(--paper);z-index:1}
+.feat:hover .vinyl,.feat:focus-visible .vinyl{animation:spin 1.8s linear infinite}
+.soon{border-style:dashed;background:transparent}
+footer{max-width:880px;margin:0 auto;padding-block:20px 40px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.feat:hover .vinyl{animation:none}h1 .ch,.card{transition:none}}
+</style>
+<main>
+  <div class="top">
+    <div class="eyebrow">mapardopuq · Punta Arenas · Chile</div>
+    <button class="snd" id="snd" type="button" aria-pressed="false">♪ Sonido: no</button>
+  </div>
+  <h1 id="name">Miguel Ángel <span class="acc">Pardo</span></h1>
+  <p class="lede">Mi sitio personal. Aquí junto los proyectos que voy armando: música, cultura, tecnología y lo que venga.</p>
+
+  <section>
+    <h2>Proyectos</h2>
+    <div class="grid">
+      <a class="card feat" href="atlas-sonoro/">
+        <div>
+          <div class="eyebrow">Música y cultura</div>
+          <h3>Atlas sonoro</h3>
+          <p>Una línea temporal de los géneros, fichas de artistas, música de 52 países, un disco por semana para 2027 y listas públicas de YouTube Music para escuchar mientras se aprende.</p>
+          <span class="go">Entrar al Atlas →</span>
+        </div>
+        <div class="eq-wrap">
+          <canvas id="eq" role="img" aria-label="Ecualizador animado estilo radio de los 90; al pasar el dedo o el cursor las barras suben y al tocarlas suena una nota"></canvas>
+        </div>
+      </a>
+      <div class="card soon"><div class="eyebrow">Próximamente</div><h3>Blog</h3><p>Notas y reflexiones.</p></div>
+      <div class="card soon"><div class="eyebrow">Próximamente</div><h3>Otros proyectos</h3><p>Lo que vaya creando.</p></div>
+    </div>
+  </section>
+</main>
+<footer>© 2026 Miguel Ángel Pardo · hecho con Claude</footer>
+
+<script>
+(() => {
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let ctx = null, on = false;
+  try { on = localStorage.getItem("mp-snd") === "1"; } catch (e) {}
+  const btn = document.getElementById("snd");
+  const paint = () => { btn.setAttribute("aria-pressed", on); btn.textContent = on ? "♪ Sonido: sí" : "♪ Sonido: no"; };
+  paint();
+  const audio = () => { if (!ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } if (ctx && ctx.state === "suspended") ctx.resume(); return ctx; };
+  function tone(freq, dur = .25, vol = .05) {
+    if (!on) return; const a = audio(); if (!a) return;
+    const o = a.createOscillator(), g = a.createGain(); o.type = "sine"; o.frequency.value = freq;
+    g.gain.setValueAtTime(0, a.currentTime); g.gain.linearRampToValueAtTime(vol, a.currentTime + .015); g.gain.exponentialRampToValueAtTime(.0001, a.currentTime + dur);
+    o.connect(g).connect(a.destination); o.start(); o.stop(a.currentTime + dur + .05);
+  }
+  const chord = notes => notes.forEach((f, i) => setTimeout(() => tone(f, .5, .035), i * 60));
+  btn.addEventListener("click", () => { on = !on; try { localStorage.setItem("mp-snd", on ? "1" : "0"); } catch (e) {} paint(); if (on) chord([392, 494, 587]); });
+
+  const h = document.getElementById("name");
+  const pent = [392, 440, 494, 587, 659, 784, 880];
+  const wrap = node => { [...node.childNodes].forEach(c => { if (c.nodeType === 3) { const f = document.createDocumentFragment(); [...c.textContent].forEach((ch, i) => { const s = document.createElement("span"); s.className = "ch"; s.textContent = ch === " " ? " " : ch; s.addEventListener("mouseenter", () => tone(pent[i % pent.length], .2, .025)); f.appendChild(s); }); c.replaceWith(f); } else if (c.nodeType === 1) wrap(c); }); };
+  wrap(h);
+  document.querySelectorAll("a.card").forEach(c => { c.addEventListener("mouseenter", () => tone(659, .18, .03)); c.addEventListener("click", () => chord([523, 659, 784])); });
+
+  // ecualizador estilo radio de los 90: segmentos, ataque rápido, caída lenta y topes que quedan pegados
+  const cv = document.getElementById("eq"), g = cv.getContext("2d");
+  const N = 14, SEG = 16;
+  const lv = Array(N).fill(0), peak = Array(N).fill(0), hold = Array(N).fill(0), push = Array(N).fill(0);
+  const scale = [262, 294, 330, 392, 440, 523, 587, 659, 784, 880, 1047, 1175, 1319, 1568];
+  let W = 0, H = 0, beat = 0, last = performance.now();
+  const size = () => { const r = cv.getBoundingClientRect(), d = devicePixelRatio || 1; W = r.width; H = r.height; cv.width = W * d; cv.height = H * d; g.setTransform(d, 0, 0, d, 0, 0); };
+  size(); addEventListener("resize", size);
+  const colAt = e => { const r = cv.getBoundingClientRect(); return Math.max(0, Math.min(N - 1, Math.floor((e.clientX - r.left) / r.width * N))); };
+  let lastCol = -1;
+  cv.addEventListener("pointermove", e => { const c = colAt(e); push[c] = 1; if (c !== lastCol && e.pointerType !== "mouse") tone(scale[c], .25, .03); lastCol = c; });
+  cv.addEventListener("pointerleave", () => lastCol = -1);
+  cv.addEventListener("pointerdown", e => { const c = colAt(e); push[c] = 1.2; tone(scale[c], .6, .06); });
+  // energía "musical": graves con pulso de bombo, medios y agudos más nerviosos
+  const energy = (i, now) => {
+    const bass = i < 4, mids = i < 9;
+    const kick = Math.max(0, 1 - ((now % 520) / 520) * 2.2);
+    let e = bass ? .35 + .55 * kick : mids ? .3 + .35 * Math.random() : .15 + .45 * Math.random() * Math.random();
+    if (Math.random() < .04) e += .35;
+    return Math.min(1, e + push[i]);
+  };
+  let tick = 0;
+  function frame(now) {
+    now = now || performance.now();
+    const dt = Math.min(50, now - last); last = now; tick += dt;
+    if (tick > 70) {
+      tick = 0;
+      for (let i = 0; i < N; i++) {
+        const target = energy(i, now) * SEG;
+        lv[i] = target > lv[i] ? target : Math.max(0, lv[i] - 1.2);
+        push[i] *= .55;
+        if (lv[i] >= peak[i]) { peak[i] = Math.ceil(lv[i]); hold[i] = 9; }
+        else if (hold[i] > 0) hold[i]--;
+        else peak[i] = Math.max(0, peak[i] - 1);
+      }
+    }
+    const a1 = css("--accent"), a2 = css("--accent2"), ink = css("--ink"), off = css("--line");
+    g.clearRect(0, 0, W, H);
+    const gapX = 6, gapY = 3, bw = (W - gapX * (N - 1)) / N, sh = (H - gapY * (SEG - 1)) / SEG;
+    for (let i = 0; i < N; i++) {
+      const x = i * (bw + gapX), n = Math.round(lv[i]);
+      for (let s = 0; s < SEG; s++) {
+        const y = H - (s + 1) * sh - s * gapY;
+        g.fillStyle = s < n ? (s >= SEG - 3 ? ink : s >= SEG - 7 ? a2 : a1) : off;
+        g.globalAlpha = s < n ? 1 : .45;
+        g.beginPath(); g.roundRect(x, y, bw, sh, 2); g.fill();
+      }
+      g.globalAlpha = 1;
+      if (peak[i] > 0) { const p = Math.min(SEG, peak[i]), y = H - p * sh - (p - 1) * gapY; g.fillStyle = ink; g.beginPath(); g.roundRect(x, y, bw, Math.max(2, sh * .45), 2); g.fill(); }
+    }
+    if (!reduce) requestAnimationFrame(frame);
+  }
+  if (reduce) { for (let i = 0; i < N; i++) { lv[i] = SEG * (.3 + .4 * Math.abs(Math.sin(i))); peak[i] = Math.ceil(lv[i]) + 1; } }
+  frame();
+})();
+</script>
+</body></html>
